@@ -66,7 +66,7 @@ namespace SqliteTestBed
                     return;
                 }
 
-                Console.WriteLine($"Processing: {currentChannelTV.Id}:{currentChannelTV.ChannelQuality}");
+                Console.WriteLine($"Processing: {currentChannelTV.GroupTitle}:{currentChannelTV.Id}:{currentChannelTV.ChannelQuality}");
 
                 // Check if Channel added
                 var isNewChannel = false;
@@ -92,7 +92,7 @@ namespace SqliteTestBed
                 
                 // if (currentChannelTV.Name.Contains('*'))
                 // {
-                //     Console.WriteLine(m3uLine);
+                    Console.WriteLine(m3uLine);
                 // }
             }
 
@@ -115,11 +115,6 @@ namespace SqliteTestBed
 
             var tvgName = auxInformation.Substring(tvgName_Index, tvgLogo_Index - tvgName_Index).Trim();
 
-            if (string.IsNullOrEmpty(channel.Id))
-            {
-                return null;
-            }
-
             var tvgNameArray = tvgName.Split(':');
             if (tvgNameArray.Length == 1)
             {
@@ -129,6 +124,11 @@ namespace SqliteTestBed
             {
                 channel.Name = tvgNameArray[0].Trim();
                 channel.VideoParameters = tvgNameArray[1].Trim();
+            }
+
+            if (string.IsNullOrEmpty(channel.Id))
+            {
+                channel.Id = channel.Name;
             }
 
             var tvgLogo = auxInformation.Substring(tvgLogo_Index, groupTitle_Index - tvgLogo_Index).Trim();
