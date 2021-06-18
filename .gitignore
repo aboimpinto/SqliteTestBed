@@ -357,3 +357,6 @@ MigrationBackup/
 .ionide/
 
 *.m3u   
+*.db
+*.db-sch
+*.db-wal

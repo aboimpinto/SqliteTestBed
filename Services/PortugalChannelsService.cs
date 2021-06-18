@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using SqliteTestBed.DbServices;
@@ -7,16 +8,20 @@ namespace SqliteTestBed.Services
 {
     public class PortugalChannelsService : IChannelGroupHandler
     {
+        private readonly ChannelsContext _dbContext;
         private List<Channel> _channelList = new List<Channel>();
 
-        public PortugalChannelsService(ChannelsDbService channelsDbService)
+        public PortugalChannelsService(ChannelsContext dbContext)
         {
+            this._dbContext = dbContext;
         }
 
         public void Process(TvChannelFile currentChannelTV)
         {
             var isNewChannel = false;
-            var currentChannel = this._channelList.SingleOrDefault(x => x.Name == currentChannelTV.Id);
+            // var currentChannel = this._channelList.SingleOrDefault(x => x.Name == currentChannelTV.Id);
+            var currentChannel = this._dbContext.Channels.SingleOrDefault(x => x.Name == currentChannelTV.Id);
+
             if (currentChannel == null)
             {
                 currentChannel = new Channel();
@@ -34,7 +39,13 @@ namespace SqliteTestBed.Services
             if (isNewChannel)
             {
                 this._channelList.Add(currentChannel);
+                
+                this._dbContext.Add<Channel>(currentChannel);
             }
+
+            this._dbContext.SaveChanges();
+
+            Console.WriteLine($"Processing: {currentChannel.Name} : {channelUrl.ChannelQuality}");
         }
     }
 }

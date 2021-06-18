@@ -1,5 +1,3 @@
-using System;
-
 namespace SqliteTestBed.Model
 {
     public class TvChannelFile
