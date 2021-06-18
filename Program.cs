@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reactive.Linq;
+using SqliteTestBed.DbServices;
 using SqliteTestBed.Extensions;
 using SqliteTestBed.Model;
+using SqliteTestBed.Services;
 
 namespace SqliteTestBed
 {
@@ -42,6 +44,11 @@ namespace SqliteTestBed
         private static List<string> Categories = new List<string>();
         private static List<Channel> ChannelList = new List<Channel>();
 
+        private static IDictionary<string, IChannelGroupHandler> _handlers = new Dictionary<string, IChannelGroupHandler>
+        {
+            { "PORTUGAL", new PortugalChannelsService(ChannelsDbService.Instance) }
+        };
+
         private static void ProcessM3ULine(string m3uLine)
         {
             if (m3uLine.StartsWith("#EXTINF"))
@@ -68,27 +75,35 @@ namespace SqliteTestBed
 
                 Console.WriteLine($"Processing: {currentChannelTV.GroupTitle}:{currentChannelTV.Id}:{currentChannelTV.ChannelQuality}");
 
-                // Check if Channel added
-                var isNewChannel = false;
-                var currentChannel = ChannelList.SingleOrDefault(x => x.Name == currentChannelTV.Id);
-                if (currentChannel == null)
+                var channelGroupHandler = _handlers.SingleOrDefault(x => x.Key == currentChannelTV.GroupTitle).Value;
+                if (channelGroupHandler == null)
                 {
-                    currentChannel = new Channel();
-                    currentChannel.Name = currentChannelTV.Id;
-                    currentChannel.Logo = currentChannelTV.Logo;
-                    currentChannel.Category = currentChannelTV.GroupTitle.ToUpper();
-                    isNewChannel = true;
+                    return;
                 }
-                
-                var channelUrl = new ChannelUrl();
-                channelUrl.ChannelQuality = currentChannelTV.ChannelQuality.ToString();
-                channelUrl.Url = currentChannelTV.Path;
-                currentChannel.Url.Add(channelUrl);
 
-                if (isNewChannel)
-                {
-                    ChannelList.Add(currentChannel);
-                }
+                channelGroupHandler.Process(currentChannelTV);
+
+                // // Check if Channel added
+                // var isNewChannel = false;
+                // var currentChannel = ChannelList.SingleOrDefault(x => x.Name == currentChannelTV.Id);
+                // if (currentChannel == null)
+                // {
+                //     currentChannel = new Channel();
+                //     currentChannel.Name = currentChannelTV.Id;
+                //     currentChannel.Logo = currentChannelTV.Logo;
+                //     currentChannel.Category = currentChannelTV.GroupTitle.ToUpper();
+                //     isNewChannel = true;
+                // }
+                
+                // var channelUrl = new ChannelUrl();
+                // channelUrl.ChannelQuality = currentChannelTV.ChannelQuality.ToString();
+                // channelUrl.Url = currentChannelTV.Path;
+                // currentChannel.Url.Add(channelUrl);
+
+                // if (isNewChannel)
+                // {
+                //     ChannelList.Add(currentChannel);
+                // }
                 
                 // if (currentChannelTV.Name.Contains('*'))
                 // {

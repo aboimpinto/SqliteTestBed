@@ -7,6 +7,10 @@ namespace SqliteTestBed.DbServices
     {
         public DbSet<Category> Categories { get; set; }
 
+        public DbSet<Channel> Channels { get; set; }
+
+        public DbSet<ChannelUrl> ChannelUrls { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseSqlite("Data Source=Channels.db");
     }
