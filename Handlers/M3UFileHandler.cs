@@ -94,16 +94,7 @@ namespace SqliteTestBed.Handlers
 
             var tvgName = auxInformation.Substring(tvgName_Index, tvgLogo_Index - tvgName_Index).Trim();
 
-            var tvgNameArray = tvgName.Split(':');
-            if (tvgNameArray.Length == 1)
-            {
-                channel.Name = this.ExtractAndSanitizeValue(tvgName);
-            }
-            else
-            {
-                channel.Name = tvgNameArray[0].Trim();
-                channel.VideoParameters = tvgNameArray[1].Trim();
-            }
+            channel.Name = this.ExtractAndSanitizeValue(tvgName);
 
             if (string.IsNullOrEmpty(channel.Id))
             {

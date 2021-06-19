@@ -18,22 +18,26 @@ namespace SqliteTestBed.Services
 
         public void Process(TvChannelFile currentChannelTV)
         {
+            if (currentChannelTV.Name.Contains("*"))
+            {
+                return;
+            }
+
             var isNewChannel = false;
-            // var currentChannel = this._channelList.SingleOrDefault(x => x.Name == currentChannelTV.Id);
-            var currentChannel = this._dbContext.Channels.SingleOrDefault(x => x.Name == currentChannelTV.Id);
+            var currentChannel = this._dbContext.Channels.SingleOrDefault(x => x.Name.ToUpper().Trim() == currentChannelTV.Id.ToUpper().Trim());
 
             if (currentChannel == null)
             {
                 currentChannel = new Channel();
-                currentChannel.Name = currentChannelTV.Id;
-                currentChannel.Logo = currentChannelTV.Logo;
+                currentChannel.Name = currentChannelTV.Id.ToUpper().Trim();
+                currentChannel.Logo = currentChannelTV.Logo.Trim();
                 currentChannel.Category = currentChannelTV.GroupTitle.ToUpper();
                 isNewChannel = true;
             }
             
             var channelUrl = new ChannelUrl();
-            channelUrl.ChannelQuality = currentChannelTV.ChannelQuality.ToString();
-            channelUrl.Url = currentChannelTV.Path;
+            channelUrl.ChannelQuality = currentChannelTV.ChannelQuality.ToString().Trim();
+            channelUrl.Url = currentChannelTV.Path.Trim();
             currentChannel.Url.Add(channelUrl);
 
             if (isNewChannel)

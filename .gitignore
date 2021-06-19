@@ -358,5 +358,5 @@ MigrationBackup/
 
 *.m3u   
 *.db
-*.db-sch
+*.db-shm
 *.db-wal
