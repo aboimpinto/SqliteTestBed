@@ -1,15 +1,15 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using SqliteTestBed.DbServices;
 using SqliteTestBed.Model;
 
 namespace SqliteTestBed.Services
 {
-    public class PortugalChannelsService : IChannelGroupHandler
+    public class PortugalLowChannelsService : IChannelGroupHandler
     {
         private readonly ChannelsContext _dbContext;
-        public PortugalChannelsService(ChannelsContext dbContext)
+
+        public PortugalLowChannelsService(ChannelsContext dbContext)
         {
             this._dbContext = dbContext;
         }
@@ -30,16 +30,6 @@ namespace SqliteTestBed.Services
             {
                 var rawName = currentChannelTV.Id.ToUpper().Trim();
                 var withoutHDName = currentChannelTV.Id.ToUpper().Trim().Substring(0, currentChannelTV.Id.ToUpper().Trim().Length - 2);
-
-                Console.WriteLine($"{rawName} : {withoutHDName}");
-
-                currentChannelTVName = withoutHDName.Trim();
-            }
-
-            if (currentChannelTV.Id.ToUpper().Trim().EndsWith("[FHD]"))
-            {
-                var rawName = currentChannelTV.Id.ToUpper().Trim();
-                var withoutHDName = currentChannelTV.Id.ToUpper().Trim().Substring(0, currentChannelTV.Id.ToUpper().Trim().Length - 5);
 
                 Console.WriteLine($"{rawName} : {withoutHDName}");
 
@@ -69,7 +59,7 @@ namespace SqliteTestBed.Services
 
             this._dbContext.SaveChanges();
 
-            Console.WriteLine($"Processing PORTUGAL: {currentChannel.Name} : {channelUrl.ChannelQuality}");
+            Console.WriteLine($"Processing PORTUGAL LOW: {currentChannel.Name} : {channelUrl.ChannelQuality}");
         }
     }
 }

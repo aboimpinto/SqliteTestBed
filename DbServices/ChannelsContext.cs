@@ -5,7 +5,7 @@ namespace SqliteTestBed.DbServices
 {
     public class ChannelsContext : DbContext
     {
-        public DbSet<Category> Categories { get; set; }
+        // public DbSet<Category> Categories { get; set; }
 
         public DbSet<Channel> Channels { get; set; }
 

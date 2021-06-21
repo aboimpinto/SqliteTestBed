@@ -24,7 +24,8 @@ namespace SqliteTestBed.Handlers
 
             this._handlers = new Dictionary<string, IChannelGroupHandler>
             {
-                { "PORTUGAL", new PortugalChannelsService(dbContext) }
+                { "PORTUGAL", new PortugalChannelsService(dbContext) },
+                { "PORTUGAL [LOW]", new PortugalLowChannelsService(dbContext) }
             }; 
          }
 
