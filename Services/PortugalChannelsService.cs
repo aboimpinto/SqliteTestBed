@@ -52,11 +52,12 @@ namespace SqliteTestBed.Services
             {
                 currentChannel = new Channel();
                 currentChannel.Name = currentChannelTVName;
-                currentChannel.Logo = currentChannelTV.Logo.Trim();
                 currentChannel.Category = currentChannelTV.GroupTitle.ToUpper();
                 isNewChannel = true;
             }
             
+            currentChannel.Logo = currentChannelTV.Logo.Trim();
+
             var channelUrl = new ChannelUrl();
             channelUrl.ChannelQuality = currentChannelTvQuality;
             channelUrl.Url = currentChannelTV.Path.Trim();
